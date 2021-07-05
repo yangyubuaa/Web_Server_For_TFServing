@@ -1,1 +1,3 @@
 python web and tfserving的模型部署代码
+1、model_transfer模块将torch模型加载转为onnx模型再转为pb模型，转为onnx模型需要pytorch环境，转为pb模型需要tensorflow环境，环境在Dockfile给出
+
