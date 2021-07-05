@@ -21,7 +21,7 @@ def torchmodel2onnx():
     # 将pytorch模型导出为onnx格式
     torch.onnx.export(albert_model,
                       (dummy_input0, dummy_input1, dummy_input2),
-                      "albert_cls.onnx",
+                      "output.onnx",
                       input_names=["input_ids", "token_type_ids", "attention_mask"],
                       output_names=["loss", "logits", "hidden_states", "attentions"],
                       opset_version=12)
