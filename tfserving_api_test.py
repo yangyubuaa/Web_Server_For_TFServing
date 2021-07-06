@@ -3,7 +3,7 @@ import requests
 import json
 if __name__ == "__main__":
 
-    tokenizer = BertTokenizer.from_pretrained("albert_tiny_pytorch")
+    tokenizer = BertTokenizer.from_pretrained("model_transfer/albert_tiny_pytorch")
     user_input = "网络游戏好玩吗"
     tokenized = tokenizer(user_input, max_length=64, truncation=True, padding="max_length")
     print(tokenized)

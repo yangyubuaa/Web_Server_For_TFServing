@@ -1,10 +1,12 @@
+import time
 import json
+import numpy as np
 from flask import Flask
 from flask import request
 app = Flask(__name__)
 
 from transformers import BertTokenizer
-tokenizer = BertTokenizer.from_pretrained("albert_tiny_pytorch")
+tokenizer = BertTokenizer.from_pretrained("model_transfer/albert_tiny_pytorch")
 
 from tfserving_api import tfserving_request_lazy, tfserving_request
 
@@ -17,27 +19,27 @@ def predict():
 def indus_cls_refuse():
     try:
         # 参数解析
-        params = request.json
-        # params = json.loads(params)
+        params = request.get_data()
+        params = json.loads(params)
         print(params)
-        for key, value in params.items():
-            print(key)
+        
+    
         keywords = params["data"]["contents"]
         keywordList = []
         for kwd in keywords:
             keywordList.append(kwd["content"])
 
         print(keywordList)
-        start_predict = time()
+        start_predict = time.time()
         # 调用TFServing进行模型预测
-        '''
-        tfserving_request(tokenizer, keywordList)
-        tfserving_request_lazy(tokenizer, keywordList)
+        
+        # tfserving_request(tokenizer, keywordList)
+        ret_list = tfserving_request_lazy(tokenizer, keywordList)
 
-        end_predict = time()
-        # print('predict use time:', end_predict - start_predict)
-        # print(ret_list)
-        # print(len(ret_list))
+        end_predict = time.time()
+        print('predict use time:', end_predict - start_predict)
+        print(ret_list)
+        print(len(ret_list))
 
         # 结果返回
         ret = {"result": 200}
@@ -45,6 +47,7 @@ def indus_cls_refuse():
         ret['contentType'] = params["contentType"]
 
         ret['data'] = params["data"]
+        print("____")
         # ret['data']['rst'] = ret_list
         for idx, val in enumerate(ret_list, 0):
             pred = np.argmax(val)
@@ -102,7 +105,7 @@ def indus_cls_refuse():
             # ret['data']["keywords"][idx]["probability"] = round(y_score[idx],2)
         ret = json.dumps(ret, ensure_ascii=False)
         return ret
-        '''
+        
     except Exception as e:
         print('print error:', str(e))
         ret = {"result": 500}

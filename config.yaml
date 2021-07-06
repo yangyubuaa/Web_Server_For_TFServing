@@ -1,0 +1,5 @@
+tfserving_ip: 10.160.35.116
+tfserving_port: 8501
+
+
+model_path: model_transfer/albert_tiny_pytorch
